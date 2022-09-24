@@ -5,10 +5,10 @@
 // Third party
 #include "imgui.h"
 #include "imgui-SFML.h"
-#include "imgui_demo.h"
 #include <SFML/Graphics.hpp>
 // My modules
 #include "Drawable.h"
+#include "Maze.h"
 
 class App
 {
@@ -23,6 +23,7 @@ private:
 	void UpdateImGuiStuff();
 	void UpdateSFMLStuff();
 	void DrawSFMLStuff();
+	void DrawImGuiStuff();
 private:
 	std::unique_ptr<sf::RenderWindow> window;
 	std::vector<std::unique_ptr<Drawable>> SFMLDrawables;

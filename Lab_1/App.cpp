@@ -1,10 +1,14 @@
 #include "App.h"
+#include "imgui_demo.h"
 
 App::App()
 {
     window = std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 800), "Lab_1(Path finding)");
     ImGui::SFML::Init(*window.get());
     ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+    // Add all SFML drawable objects
+    SFMLDrawables.push_back(std::make_unique<Maze>(window->getSize(), 10));
 }
 
 App::~App()
@@ -35,14 +39,15 @@ int App::Tick()
         if (event.type == sf::Event::Closed)
             window->close();
     }
+
     // Update
-    ImGui::SFML::Update(*window.get(), clock.restart());
     UpdateImGuiStuff();
     UpdateSFMLStuff();
+
     // Draw
     window->clear();
     DrawSFMLStuff();
-    ImGui::SFML::Render(*window.get());
+    DrawImGuiStuff();
     window->display();
 
     return 0;
@@ -50,12 +55,32 @@ int App::Tick()
 
 void App::UpdateImGuiStuff()
 {
+    ImGui::SFML::Update(*window.get(), clock.restart());
+
+    ImGui::Begin("Setting");
+    ImGui::Text("Settings will be placed here");
+    ImGui::End();
+
+    ImGui::ShowStackToolWindow();
 }
 
 void App::UpdateSFMLStuff()
 {
+    for (auto& entity : SFMLDrawables)
+    {
+        entity->Update(*window.get());
+    }
 }
 
 void App::DrawSFMLStuff()
 {
+    for (auto& entity : SFMLDrawables)
+    {
+        entity->Draw(*window.get());
+    }
+}
+
+void App::DrawImGuiStuff()
+{
+    ImGui::SFML::Render(*window.get());
 }
